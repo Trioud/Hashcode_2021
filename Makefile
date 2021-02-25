@@ -4,7 +4,12 @@ CC	= g++
 
 RM	= rm -f
 
-SRCS	= ./src/main.cpp 
+SRCS	= ./blablalgoritm.cpp \
+	  ./src/Car.cpp \
+	  ./src/Intersection.cpp \
+	  ./src/Street.cpp \
+	  ./src/Trafic.cpp \
+	  ./src/main.cpp 
 
 OBJS	= $(SRCS:.cpp=.o)
 

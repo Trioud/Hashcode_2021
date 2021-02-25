@@ -13,6 +13,9 @@
 #include "../include/TrafficLights.hpp"
 #include <vector>
 #include <sstream>
+#include "../include/Car.hpp"
+#include "../include/Street.hpp"
+#include "../include/Trafic.hpp"
 
 static int x = 0;
 
@@ -87,7 +90,28 @@ std::string get_cars(std::string line, bool filled)
     return ("");
 }
 
-TrafficsInfos lecture_file(std::ifstream &File)
+void createStreetList(std::vector<std::string> roads, std::vector<Street> &StreetList)
+{
+    for (auto e : roads) {
+        std::vector<std::string> tmp = split(e, ' ');
+        int a = std::stoi(tmp[0]);
+        int b = std::stoi(tmp[1]);
+        int c = std::stoi(tmp[3]);
+        Street ee(a, b, c, tmp[2]);
+        StreetList.push_back(ee);
+    }
+}
+
+void createCarList(std::vector<std::string> cars, std::vector<Car> &CarsList)
+{
+    for (auto e : cars) {
+        std::vector<std::string> tmp = split(e, ' ');
+        Car ee(tmp);
+        CarsList.push_back(ee);
+    }
+}
+
+Trafic lecture_file(std::ifstream &File)
 {
     //6 -> nb de seconde de la simulation
     //4 -> Le nb d'intersections
@@ -95,14 +119,16 @@ TrafficsInfos lecture_file(std::ifstream &File)
     //2 -> Nombres de voitures
     //1000 -> Nombre de points que tu remportes avant le temps;
     int i = 0;
+    Trafic traficInfos;
     std::string stock;
     std::string tmp;
     TrafficsInfos infos;
     std::vector<std::string> roads;
     std::vector<std::string> cars;
+    std::vector<Street> StreetList;
+    std::vector<Car> CarList;
 
     while (getline(File, stock)) {
-        std::cout << std::stoi(stock) << std::endl;
         tmp = get_roads(stock, infos.filled);
         if (!tmp.empty()) {
             roads.push_back(tmp);
@@ -115,7 +141,12 @@ TrafficsInfos lecture_file(std::ifstream &File)
         }
         first_line(infos, stock);
     }
-    return (infos);
+    createStreetList(roads, StreetList);
+    createCarList(cars, CarList);
+    traficInfos._CarList = CarList;
+    traficInfos._StreetList = StreetList;
+    traficInfos.infos = infos;
+    return (traficInfos);
 }
 
 int blablacars(int ac, char **av)
@@ -123,7 +154,8 @@ int blablacars(int ac, char **av)
     std::ifstream fichier(av[1]);
 
     if (fichier) {
-        lecture_file(fichier);
+        Trafic tmp = lecture_file(fichier);
+        blablalgorithm(tmp);
 
     } else {
         throw std::invalid_argument("File can't be found");

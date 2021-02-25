@@ -5,6 +5,10 @@
 ** TrafficLights
 */
 
+
+#ifndef TrafficsInfos_HPP_
+#define TrafficsInfos_HPP_
+
 #include <iostream>
 
 class TrafficsInfos {
@@ -40,3 +44,5 @@ class TrafficsInfos {
     protected:
     private:
 };
+
+#endif
